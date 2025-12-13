@@ -1,0 +1,150 @@
+#########################################################
+# Curso: Data Science and Artificial Intelligence
+# Disciplina: Data Architecture, Integration and Ingestion
+# Data: 2024
+# Prof.: Ivan Gancev - profivan.gancev@fiap.com.br
+#########################################################
+
+#####################################
+####### PRÉ-REQUISITOS ANTES DE INICIAR O EXERCÍCIO
+#####################################
+--Instalação do docker, através do link abaixo para download (selecionar de acordo com o sistema operacional (WINDOWS, MAC, LINUX))
+https://www.docker.com/products/docker-desktop/
+
+--Instalação do git através do link abaixo (selecione de acordo com seu sistema operacional (WINDOWS, MAC, LINUX))
+https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+
+--Acesse o terminal do seu Sistema Operacional e crie um diretório para armazenar as imagens
+Para WINDOWS uso o comando:      mkdir c:\docker
+Para MAC ou LINUX use o comando: mkdir /docker
+
+-- Acesse o diretório "docker"
+Para WINDOWS uso o comando:      cd \docker
+Para MAC ou LINUX use o comando: cd /docker
+
+-- Clonar repositório com imagens do ecossistema Hadoop
+     git clone https://github.com/fabiogjardim/bigdata_docker.git
+
+-- Acesse o diretório "bigdata_docker"
+Para WINDOWS uso o comando:      cd \docker\bigdata_docker
+Para MAC ou LINUX use o comando: cd /docker/bigdata_docker
+
+--Iniciar os containeres para uso do nifi
+     docker-compose up -d
+     docker image ls
+
+#####################################
+########## B O N U S ################
+######## AMBIENTE HADOOP ############
+#####################################
+--Dados do containers
+     docker container inspect [nome do container]
+
+--Iniciar um container
+     docker-compose up -d [nome do container]
+
+--Em caso de mensagem de erro na porta 50070
+     net stop winnat 
+     docker start ... 
+     net start winnat
+
+
+--Iniciar todos os containers
+     docker-compose up -d 
+
+--Parar todos containers
+     docker stop $(docker ps -a -q)
+No Powershell
+    docker ps -q | % { docker stop $_ }
+
+--Acessar log do container
+     docker container logs [nome do container] 
+
+--Acesso WebUI dos Frameworks
+HDFS:          http://localhost:50070
+Presto:        http://localhost:8080
+Nifi:          http://localhost:9090/nifi
+Jupyter Spark: http://localhost:8889
+Hue:           http://localhost:8888
+Spark:         http://localhost:4040
+
+--Acesso por shell
+--HDFS
+      docker exec -it datanode bash
+
+--Sqoop
+      docker exec -it datanode bash
+
+--Usuários e senhas
+Hue
+Usuário: admin
+Senha: admin
+
+MySQL
+Usuário: root
+Senha: secret
+
+github: https://github.com/fabiogjardim/bigdata_docker
+
+
+#####################################
+########## INÍCIO EXERCÍCIO #########
+#####################################
+
+--01) Copiar o arquivo .csv do exercício para o container nifi
+Baixar o arquivo "Aula04 - exercícios.zip" para a pasta C:\dts e descompacte-o
+docker container exec -it nifi bash
+mkdir /tmp/nifi
+exit
+docker container cp c:\dts\Google_Trends_DataScience.csv nifi:/tmp/nifi
+
+--02) Copiar os arquivos hdfs-site.xml e core-site.xml para o container nifi
+docker container cp namenode:/etc/hadoop/core-site.xml .
+docker container cp namenode:/etc/hadoop/hdfs-site.xml .
+docker container cp core-site.xml nifi:/opt/nifi/nifi-current/conf/
+docker container cp hdfs-site.xml nifi:/opt/nifi/nifi-current/conf/
+
+--03) Acessar o nifi pelo browser
+http://localhost:9090/nifi
+
+--04) Adicionar um processor do tipo GetFile
+Na barra de componentes clicar em "Processor" e arrastar para o board do nifi
+Escolher o Processor "GetFile"
+
+--05) Configurar o processor para ler o arquivo .csv
+Botão direito no processor ir em "configure"
+ABA Scheduling
+     Run Schedule: 500 sec
+ABA properties
+     Input Directory: /tmp/nifi
+     File Filter: Google_Trends_DataScience.csv
+     Keep Source File= True
+
+06) Adicionar um processor do tipo PutHDFS
+Na barra de componentes clicar em "Processor" e arrastar para o board do nifi
+Escolher o Processor "PutHDFS"
+
+--07) Configurar o processor para se conectar ao HDFS
+Botão direito no processor ir em "configure"
+ABA settings
+     Automatically Terminate Relationships: Marcar "failure" e "success"
+ABA properties
+     Hadoop Configuration Resources= /opt/nifi/nifi-current/conf/hdfs-site.xml,/opt/nifi/nifi-current/conf/core-site.xml
+     Directory= /tmp
+
+--08) Conectar os dois processor e marcar as opções de auto-terminate
+Clicar no centro do primeiro processor e arrastar para conectar como segundo
+
+--09) Executar os 2 processors e desliga-los em seguida
+Botão direito no processor GetFile, clicar em start
+Botão direito no processor GetFile, clicar em stop
+Botão direito no processor PutHDFS, clicar em start
+
+--10) Verificar o diretório do HDFS se o arquivo foi carregado
+docker container exec -it namenode bash
+hdfs dfs -ls /tmp/Google_Trends_DataScience.csv
+hdfs dfs -cat /tmp/Google_Trends_DataScience.csv
+
+
+
+

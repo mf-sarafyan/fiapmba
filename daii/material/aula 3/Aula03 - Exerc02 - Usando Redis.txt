@@ -1,0 +1,124 @@
+#########################################################
+# Curso: Data Science and Artificial Intelligence
+# Disciplina: Data Architecture, Integration and Ingestion
+# Data: 2025
+# Prof.: Ivan Gancev - profivan.gancev@fiap.com.br
+#########################################################
+
+#####################################
+####### PRÉ-REQUISITOS ANTES DE INICIAR O EXERCÍCIO
+#####################################
+--Baixar imagem do repositório
+docker pull redis:latest
+
+#####################################
+########## B O N U S ################
+####### COMANDOS DOCKER ÚTEIS #######
+#####################################
+--Caso saia do Container, liste os containers
+docker container ls -a
+--Inicie o container
+docker container start MyRedis
+--Conecte no container
+docker container exec -it MyRedis bash
+
+####### LINK SOBRE CONFIGURAÇÃO DE TAMANHO MÁXIMO DO REDIS
+https://redis.io/docs/getting-started/faq/#what-is-the-maximum-number-of-keys-a-single-redis-instance-can-hold-and-what-is-the-max-number-of-elements-
+
+
+######################################
+########## INÍCIO EXERCÍCIO ##########
+######################################
+--01) Cirar um container a partir da imagem baixada
+docker run --name MyRedis -it redis bash
+
+--02) Iniciar o server do redis
+redis-server & 2>&1
+redis-cli
+
+--03) Executar comando para ver configurações
+config get *
+
+--04) Criar chave com comando SET
+SET minhachave teste
+
+--05) Recuperar chave com comando GET
+GET minhachave
+
+--06) Criar chave com expiração
+SET chaveexp 10 EX 20
+
+--07) Criar chave usando NX e XX
+SET minhachave teste2 NX
+SET minhachave teste2 XX
+
+--08) Alterar chave com SETRANGE
+SETRANGE minhachave 3 xxxxxxxxxx
+
+--09) Alterar chave com comando APPEND
+APPEND minhachave -teste
+
+--10) Criar chave bitmap com setbit
+setbit meubit 0 1
+
+--11) Consultar chave bitmap com getbit
+getbit meubit 0
+
+--12) Incrementar numérico com INCR
+set chaveint 10
+incr chaveint
+
+--13) Incrementar numérico com INCRBY
+incrby chaveint 3
+
+--14) Forçar a expiração de uma chave
+expire chaveint 0
+
+
+------------------------------------
+--HASHES
+
+--15) Definir um conjunto de campos
+HMSET meuhash campo1 valor1 campo2 20 campo3 valor30
+
+--16) Consultar um conjunto de campos
+HMGET meuhash campo2 campo3
+
+--17) Consultar todos os campos do Hash
+HGETALL meuhash
+
+
+------------------------------------
+--LISTS
+
+--18) Criar lista com mais de um item
+LPUSH minhalista 10 a b 20 c d 30
+
+--19) Adicionar itens a lista
+LPUSH minhalista e f 40 g h 50
+
+--20) Remover um item do final
+RPOP minhalista
+
+--21) Verificar o tamanho da lista
+LLEN minhalista
+
+
+------------------------------------
+--SETS
+
+--22) Criar coleção com mais de um item
+SADD meuset a c b f d g 10 50 30
+
+--23) Consultar coleção
+SMEMBERS meuset
+
+--24) Adicionar itens a coleção
+SADD meuset z j x 20 40 g 10 50 30
+
+--25) Verificar se um valor está na coleção
+SISMEMBER meuset 40
+
+--26) Remover itens da coleção
+SREM meuset 20 40
+

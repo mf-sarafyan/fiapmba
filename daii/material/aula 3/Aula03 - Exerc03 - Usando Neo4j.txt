@@ -1,0 +1,152 @@
+#########################################################
+# Curso: Data Science and Artificial Intelligence
+# Disciplina: Data Architecture, Integration and Ingestion
+# Data: 2025
+# Prof.: Ivan Gancev - profivan.gancev@fiap.com.br
+#########################################################
+
+#####################################
+####### PRÉ-REQUISITOS ANTES DE INICIAR O EXERCÍCIO
+#####################################
+--Baixar imagem do repositório
+docker pull neo4j:latest
+
+#####################################
+########## B O N U S ################
+####### COMANDOS DOCKER ÚTEIS #######
+#####################################
+--Caso saia do Container, liste os containers
+docker container ls -a
+--Inicie o container
+docker container start MyNeo4j 
+--Conecte no container
+docker container exec -it MyNeo4j bash
+
+####### LINKS PARA CONSULTAS POR ROTAS NO NEO4J
+https://neo4j.com/docs/cypher-manual/current/clauses/match/#query-shortest-path
+https://neo4j.com/developer/kb/all-shortest-paths-between-set-of-nodes/
+
+######################################
+########## INÍCIO EXERCÍCIO ##########
+######################################
+--1) Criar um container a partir da imagem publicando a porta 7474
+docker run --name MyNeo4j --publish=7474:7474 --publish=7687:7687 -it neo4j bash
+
+--02) Listar os comandos do neo4j e neo4j-admin
+neo4j -h
+neo4j-admin -h
+
+--03) Iniciar o serviço do neo4j
+neo4j start
+
+--04) Verifique os diretórios configurados
+
+
+--05) Verificar o status do servidor neo4j
+neo4j status
+
+--06) Acessar o console em localhost:7474
+Abrir no browser: http://localhost:7474/
+
+--07) Definir um novo usuário e senha
+
+
+------------------------------------
+--COMANDOS ADMINISTRATIVOS
+
+--08) Listar databases
+SHOW DATABASES;
+
+--09) Listar usuários
+SHOW USERS
+
+--10) Criar um usuário
+create user fiap set plaintext password 'f1@p1234'
+
+--11) Contar os nós do database
+match (n) return count(n) as countNode;
+
+
+------------------------------------
+--CRIANDO NÓS, RÓTULOS, PROPRIEDADES E RELACIONAMENTOS
+
+--12) Criar 2 nós para pilotos de F1
+create(Ver:Piloto{name:'Ver',equipe:'Redbull'})
+create(Tsu:Piloto{name:'Tsu',equipe:'Redbull'})
+
+--13) Criar 1 nó para equipe de F1
+create(Redbull:Equipe{name:'Redbull'})
+
+--14) Consultar o resultado
+match (n) return n
+
+--15) Criar 2 nós para pilotos de F1
+create(Ant:Piloto{name:'Ant',equipe:'Mercedes'})
+create(Rus:Piloto{name:'Rus',equipe:'Mercedes'})
+
+--16) Criar 1 nó para equipe de F1
+create(Mercedes:Equipe{name:'Mercedes'})
+
+--17) Consultar o resultado
+MATCH (n) OPTIONAL MATCH (n)-[r]-(m) RETURN n, r, m;
+
+--18) Criar os relacionamentos entre os pilotos de 1 equipe (executar 1 linha por vez)
+match (Ver:Piloto{name:'Ver',equipe:'Redbull'}), (Redbull:Equipe{name:'Redbull'}) CREATE (Ver)-[r:DRIVES]->(Redbull)  return Ver, Redbull;
+match (Tsu:Piloto{name:'Tsu',equipe:'Redbull'}), (Redbull:Equipe{name:'Redbull'}) CREATE (Tsu)-[r:DRIVES]->(Redbull)  return Tsu, Redbull
+
+--19) Consultar o resultado
+MATCH (n) OPTIONAL MATCH (n)-[r]-(m) RETURN n, r, m;
+
+--20) Criar os relacionamentos entre os pilotos de 1 equipe (executar 1 linha por vez)
+match (Ant:Piloto{name:'Ant',equipe:'Mercedes'}), (Mercedes:Equipe{name:'Mercedes'}) CREATE (Ant)-[r:DRIVES]->(Mercedes)  return Ant, Mercedes;
+match (Rus:Piloto{name:'Rus',equipe:'Mercedes'}), (Mercedes:Equipe{name:'Mercedes'}) CREATE (Rus)-[r:DRIVES]->(Mercedes)  return Rus, Mercedes
+
+
+--21) Consultar os resultado
+MATCH (n) OPTIONAL MATCH (n)-[r]-(m) RETURN n, r, m;
+
+
+**** Comando para apagar todos os nós e seus relacionamentos
+**** match n=()-[]->() delete n
+
+-------------------------------------------------------------------------
+--EXERCÍCIO EXTRA COM ESTAÇÕES DE METRÔ DE SP
+
+--1) Criando as estações de metrô de São Paulo
+CREATE (:Estacao {nome: "Sé"})
+CREATE (:Estacao {nome: "República"})
+CREATE (:Estacao {nome: "Anhangabaú"})
+CREATE (:Estacao {nome: "Paraíso"})
+CREATE (:Estacao {nome: "Vila Mariana"})
+
+--2) Criando os relacionamentos de conexão entre as estações
+MATCH (a:Estacao {nome: "Sé"}), (b:Estacao {nome: "República"})
+CREATE (a)-[:CONEXAO]->(b);
+
+MATCH (a:Estacao {nome: "República"}), (b:Estacao {nome: "Sé"})
+CREATE (a)-[:CONEXAO]->(b);
+
+MATCH (a:Estacao {nome: "República"}), (b:Estacao {nome: "Anhangabaú"})
+CREATE (a)-[:CONEXAO]->(b);
+
+MATCH (a:Estacao {nome: "Anhangabaú"}), (b:Estacao {nome: "Paraíso"})
+CREATE (a)-[:CONEXAO]->(b);
+
+MATCH (a:Estacao {nome: "Paraíso"}), (b:Estacao {nome: "Vila Mariana"})
+CREATE (a)-[:CONEXAO]->(b);
+
+--3) Recuperando a rede de estações de metrô de São Paulo
+match n=(:Estacao)-[:CONEXAO]->(:Estacao) return n
+
+------ FIM DO EXERCÍCIO EXTRA ------------
+------------------------------------------
+
+**** Comando para excluir uma relação
+MATCH (a:Estacao {nome: "República"})-[r:CONEXAO]->(b:Estacao {nome: "Sé"})
+DELETE r;
+
+**** Comando para apagar todas as estações e seu relacionamentos
+match n=(:Estacao)-[:CONEXAO]->(:Estacao) delete n
+
+-------------------------------------------------------------------------
+
