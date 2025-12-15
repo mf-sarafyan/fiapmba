@@ -15,3 +15,7 @@ Ative a virtual env:
 Instalar os requirements dentro da env: `pip install -r requirements.txt` 
 
 Usar os notebooks ipython vai depender da sua IDE, mas quando for, tenha certeza que você vai executar eles com o executável do python que tá dentro da sua virtualenv! 
+
+# RMs 
+ 
+Matheus Sarafyan - 368700
