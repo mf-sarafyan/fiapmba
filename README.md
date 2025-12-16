@@ -19,3 +19,6 @@ Usar os notebooks ipython vai depender da sua IDE, mas quando for, tenha certeza
 # RMs 
  
 Matheus Sarafyan - 368700
+Camila Jenifer Mattos - 369016
+Olivia Mantovani Sampaio Barros - 367570
+MATHEUS BOFFO DE SOUSA - 367309
