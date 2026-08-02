@@ -1,0 +1,82 @@
+{
+  "transacoes": [
+    {
+      "id_transacao": 2001,
+      "id_conta_origem": 10,
+      "id_conta_destino": 20,
+      "tipo_transacao": "PIX",
+      "valor": 500.00,
+      "status": "AUTORIZADA",
+      "codigo_autorizacao": "PIX-AAA111"
+    },
+    {
+      "id_transacao": 2002,
+      "id_conta_origem": 20,
+      "id_conta_destino": 10,
+      "tipo_transacao": "PIX",
+      "valor": 750.00,
+      "status": "AUTORIZADA",
+      "codigo_autorizacao": "PIX-BBB222"
+    },
+    {
+      "id_transacao": 2003,
+      "id_conta_origem": 10,
+      "id_conta_destino": 30,
+      "tipo_transacao": "TED",
+      "valor": 2500.00,
+      "status": "PENDENTE",
+      "codigo_autorizacao": "TED-CCC333"
+    },
+    {
+      "id_transacao": 2004,
+      "id_conta_origem": 30,
+      "id_conta_destino": 20,
+      "tipo_transacao": "DOC",
+      "valor": 1200.00,
+      "status": "PENDENTE",
+      "codigo_autorizacao": "DOC-DDD444"
+    },
+    {
+      "id_transacao": 2005,
+      "id_conta_origem": 20,
+      "id_conta_destino": 30,
+      "tipo_transacao": "PIX",
+      "valor": 300.00,
+      "status": "AUTORIZADA",
+      "codigo_autorizacao": "PIX-EEE555"
+    }
+  ],
+  "log_transacoes": [
+    {
+      "id_log": 6001,
+      "id_transacao": 2001,
+      "evento": "Iniciada",
+      "usuario_sistema": "NIFI_PIPELINE"
+    },
+    {
+      "id_log": 6002,
+      "id_transacao": 2002,
+      "evento": "Iniciada",
+      "usuario_sistema": "NIFI_PIPELINE"
+    },
+    {
+      "id_log": 6003,
+      "id_transacao": 2003,
+      "evento": "Iniciada",
+      "usuario_sistema": "NIFI_PIPELINE"
+    },
+    {
+      "id_log": 6004,
+      "id_transacao": 2004,
+      "evento": "Iniciada",
+      "usuario_sistema": "NIFI_PIPELINE"
+    },
+    {
+      "id_log": 6005,
+      "id_transacao": 2005,
+      "evento": "Iniciada",
+      "usuario_sistema": "NIFI_PIPELINE"
+    }
+  ]
+}
+
