@@ -1,0 +1,13 @@
+# --- Core ADK (mesma versao validada no lab Google Cloud Skills Boost 32604) ---
+google-adk==1.28.0
+
+# --- Tools externas (Market Analyst) ---
+langchain==1.2.14
+langchain-community==0.4.1
+wikipedia
+ddgs
+
+# --- Fallback de dados de mercado + utilitarios ---
+requests
+python-dotenv
+google-cloud-logging
